@@ -126,7 +126,7 @@ export default function SurveyLandingPage({
         width: '100%',
         minHeight: '100vh', // as a fallback if svh not supported
         ...(survey?.backgroundImageUrl && {
-          backgroundImage: `url("/api/file/${survey.backgroundImageUrl}")`,
+          backgroundImage: `url("/api/file/${encodeURI(survey.backgroundImageUrl)}")`,
         }),
         backgroundSize: 'cover',
         backgroundPosition: 'center',
