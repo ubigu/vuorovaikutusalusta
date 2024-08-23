@@ -60,7 +60,7 @@ router.get(
     const surveys = await getSurveys(
       filterByAuthored ? userId : null,
       Boolean(filterByPublished),
-      req.user.organizations[0], // For now, use the first organization
+      req.user.organization,
     );
     res.status(200).json(surveys);
   }),
@@ -76,10 +76,9 @@ router.get(
   ]),
   asyncHandler(async (req, res) => {
     const id = Number(req.params.id);
-    // For now, use the first organization
     const survey = await getSurvey({
       id,
-      organization: req.user.organizations[0],
+      organization: req.user.organization,
     });
     res.status(200).json(survey);
   }),

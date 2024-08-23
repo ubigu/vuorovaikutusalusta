@@ -74,11 +74,11 @@ router.post(
 
     // Pick the survey ID from the request - the rest will be the remaining details/metadata
     const { surveyId, ...details } = req.body;
-    const organizations = res.locals.fileOrganizations;
-    if (surveyId == null && organizations == null) {
+    const organization = res.locals.fileOrganization;
+    if (surveyId == null && organization == null) {
       res
         .status(400)
-        .json({ message: 'Survey ID and organizations must be provided' });
+        .json({ message: 'Survey ID or organization must be provided' });
       return;
     }
 
@@ -89,7 +89,7 @@ router.post(
       mimetype,
       details,
       surveyId: surveyId == null ? null : Number(surveyId),
-      organization: organizations[0], // For now, use the first organization
+      organization: organization,
     });
     res.status(200).json({ id });
   }),
@@ -105,8 +105,7 @@ router.get(
   asyncHandler(async (req, res) => {
     const { filePath } = req.params;
     const filePathArray = filePath?.split('/') ?? [];
-    // For now, use the first organization
-    const row = await getImages(filePathArray, res.locals.fileOrganizations[0]);
+    const row = await getImages(filePathArray, res.locals.fileOrganization);
 
     res.status(200).json(row);
   }),

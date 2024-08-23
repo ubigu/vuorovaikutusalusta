@@ -17,5 +17,5 @@ export interface User {
   /**
    * User's group ids
    */
-  organizations: string[];
+  organization: string;
 }

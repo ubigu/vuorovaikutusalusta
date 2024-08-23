@@ -202,30 +202,6 @@ export default function EditSurveyInfo() {
             tr.EditSurveyInfo.mapUrlError
           }
         />
-        {!usersLoading && currentUser?.organizations.length !== 1 && (
-          <Autocomplete
-            multiple
-            defaultValue={activeSurvey.organization}
-            disabled={usersLoading || currentUser.organizations?.length === 1}
-            options={currentUser?.organizations ?? []}
-            getOptionLabel={(organization: string) => organization}
-            value={activeSurvey.groups}
-            onChange={(_, value: string[]) => {
-              editSurvey({
-                ...activeSurvey,
-                groups: value,
-              });
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="standard"
-                label={tr.EditSurveyInfo.authorizedGroups}
-                helperText={tr.EditSurveyInfo.authorizedGroupsHelperText}
-              />
-            )}
-          />
-        )}
 
         <Autocomplete
           multiple

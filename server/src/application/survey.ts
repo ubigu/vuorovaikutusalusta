@@ -517,7 +517,7 @@ export async function createSurvey(user: User) {
     `INSERT INTO data.survey (author_id, organization)
     VALUES ($1, $2)
     RETURNING *`,
-    [user.id, user.organizations[0]], // For now, use the first organization
+    [user.id, user.organization],
   );
 
   if (!surveyRow) {

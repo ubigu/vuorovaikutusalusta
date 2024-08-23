@@ -47,7 +47,7 @@ export function configureGoogleOAuth(app: Express) {
           id: profile.id,
           fullName: profile.displayName,
           email: profile._json.email,
-          organizations: [],
+          organization: 'test-group-id-1',
         });
         return done(null, user);
       },

@@ -89,7 +89,7 @@ export function configureMockAuth(app: Express) {
     id: '12345-67890-abcde-fghij1',
     fullName: 'toinen Testaaja',
     email: 'toinen.testaaja@testi.com',
-    organizations: ['test-group-id-1'],
+    organization: 'test-group-id-1',
   };
   upsertUser(mockUser);
 
@@ -143,7 +143,7 @@ export function ensureSurveyGroupAccess(id: string = 'id') {
       : null;
     if (
       typeof surveyOrganization === 'string' &&
-      !req.user.organizations.includes(surveyOrganization)
+      req.user.organization !== surveyOrganization
     ) {
       res.status(403).send('Forbidden');
     } else {
@@ -154,22 +154,18 @@ export function ensureSurveyGroupAccess(id: string = 'id') {
 
 export function ensureFileGroupAccess() {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const surveyOrganizations = req.headers['organization']
-      ? [JSON.parse(req.headers['organization'] as string)]
-      : req.user.organizations;
+    const surveyOrganization = req.headers['organization']
+      ? JSON.parse(req.headers['organization'] as string)
+      : req.user.organization;
 
-    if (!Array.isArray(surveyOrganizations)) {
+    if (typeof surveyOrganization !== 'string') {
       res.status(400).send('Bad Request');
     }
 
-    const fileOrganizations = req.user.organizations.filter((organization) =>
-      (surveyOrganizations as string[]).includes(organization),
-    );
-
-    if (fileOrganizations.length === 0) {
+    if (surveyOrganization !== req.user.organization) {
       res.status(403).send('Forbidden');
     } else {
-      res.locals.fileOrganizations = fileOrganizations;
+      res.locals.fileOrganization = surveyOrganization;
       return next();
     }
   };
