@@ -1,0 +1,20 @@
+{
+  "name": "e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "codegen": "playwright codegen http://localhost:8080/admin",
+    "test-ui": "playwright test --ui",
+    "test": "playwright test --workers=1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.10.1",
+    "pg": "^8.13.1",
+    "dayjs": "^1.10.7"
+  }
+}

@@ -1,4 +1,4 @@
-# Vuorovaikutusalusta
+# Kartalla
 
 ## Ohjelmiston taustaa
 
@@ -17,7 +17,7 @@ Kuva 1: ohjelmiston arkkitehtuuri ajoympäristössään
 
 - Käynnistä Docker -ekosysteemi projektin juuresssa komennoilla `docker-compose build && docker-compose up -d`. Esiehto: lokaalisti tulee olla asennettuna [Docker -konttien hallintajärjestelmä](https://www.docker.com/products/docker-desktop)).
 - Luo ympäristömuuttujille tiedosto polkuun `/server/.env` ja täytä se tarvittavilla muuttujilla ohjeen `/server/.template.env` mukaan.
-- Toteuta uudet toiminnallisuudet omaan Git -haaraansa, esim. `feature/new-feature-name`. Valmistuessaan yhdistä tämä haara `develop` -haaraan, josta sovellusta ajetaan testiympäristössä. Kun on aika tehdä tuotantopäivitys, vie `develop` -haaran muutokset `master` -haaraan, josta sovellusta ajetaan tuotantoympäristössä.
+- Toteuta uudet toiminnallisuudet omaan Git -haaraansa, esim. `feature/new-feature-name`. Valmistuessaan yhdistä tämä haara `develop` -haaraan, josta sovellusta ajetaan testiympäristössä. Kun on aika tehdä tuotantopäivitys, vie `develop` -haaran muutokset `main` -haaraan, josta sovellusta ajetaan tuotantoympäristössä.
 
 <br>
 
@@ -29,6 +29,16 @@ Serveri ja tietokanta juttelevat keskenään yhteydellä, joka on määritetty y
 
 Lokaalissa kehityksessä React käyttöliittymä ohjaa rajapintapyynnöt automaattisesti omaan porttiinsa. Toisin sanoen, mikäli käyttöliittymästä (portti 8080) tehdään HTTP pyyntö serverille (portti 3000), tätä ei tarvitse erikseen määrittää, vaan käyttöliittymä osaa ohjata liikenteen suoraan omasta portistaan serverin porttiin (8080 -> 3000).
 
-Sovelluskehitys noudattaa perinteistä [Gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow#:~:text=The%20overall%20flow%20of%20Gitflow,branch%20is%20created%20from%20main&text=When%20a%20feature%20is%20complete%20it%20is%20merged%20into%20the,branch%20is%20created%20from%20main) -mallia, jossa uudet toiminnallisuudet toteutetaan omaan Git -haaraansa, esim. `feature/new-feature-name`. Valmistuessaan tämä haara yhdistetään `develop` -haaraan. Kun `develop` -haaraan kohdistuu muutoksia Githubissa, automaattinen integraatio käynnistyy, joka julkistaa haaraan viedyn uuden lähdekoodin Azureen testiympäristöön. Kun tulee aika tehdä tuotantopäivitys, yhdistetään `develop` -haaran muutokset `master` -haaraan. Githubissa `master` -haaran muutokset käynnistävät automaattisen integraation, joka julkistaa lähdekoodin Azuren DevOps -palveluun. Täältä lähdekoodi taas julkistetaan automaattisesti Azureen tuotantoympäristöön.
+Sovelluskehitys noudattaa perinteistä [Gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow#:~:text=The%20overall%20flow%20of%20Gitflow,branch%20is%20created%20from%20main&text=When%20a%20feature%20is%20complete%20it%20is%20merged%20into%20the,branch%20is%20created%20from%20main) -mallia, jossa uudet toiminnallisuudet toteutetaan omaan Git -haaraansa, esim. `feature/new-feature-name`. Valmistuessaan tämä haara yhdistetään `main` -haaraan. Kun `main` -haaraan kohdistuu muutoksia Githubissa, automaattinen integraatio käynnistyy, joka julkistaa haaraan viedyn uuden lähdekoodin Azureen testiympäristöön. `main`-haaraan yhdistäminen täydentää automaattisesti `release`-luonnoksen, jonka julkaisun yhteydessä `main` haaran sisältö viedään automaattisen integraation kautta Azuren tuotantoympäristöön.
 
-## TODO
+## E2E-testaus
+
+E2E testit ajetaan automaattisesti jokaisen pull requestin yhteydessä.
+
+E2E-testiympäristö on toteutettu vastaavalla tavalla, kuin paikallinen kehitysympäristö sillä erolla, että E2E-testiympäristö käynnistetään `e2e`-kansiosta käsin. Testit ajetaan `Playwright`-kirjastoa käyttäen. Tietokannan sisältö tallennetaan erilliseen `db-data`-volumeen, joten E2E-testien ajaminen ei vaikuta kehitystietokannan sisältöön.
+
+Testiympäristön käynnistämisen jälkeen seuraavat komennot ovat käytettävissä `./e2e`-polusta:
+
+- `npm run codegen`: Avaa selainnäkymän, josta käsin pystyy luomaan testikomentoja interaktiivisesti
+- `npm run test-ui`: Ajaa testit selainnäkymässä
+- `npm test`: Ajaa testit headless-tilassa näyttäen vain tulosteen komentorivillä

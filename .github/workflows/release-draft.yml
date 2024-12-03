@@ -1,0 +1,26 @@
+name: Release draft
+
+on:
+  # Update release draft on pushes to the main branch
+  push:
+    branches: [main]
+  # Run on PRs only for autolabeler
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+
+jobs:
+  update-draft:
+    name: Update draft
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@v6
+        with:
+          commitish: main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

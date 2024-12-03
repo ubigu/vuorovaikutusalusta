@@ -1,21 +1,24 @@
-name: Production deployment
+name: Application deployment to test and production
 
 on:
   push:
+    # On push to main branch deploy to test
     branches: [main]
-  workflow_dispatch:
+  release:
+    # On release deploy to production
+    types: [released]
 
 env:
-  IMAGE_NAME: ${{ secrets.ACR_REGISTRY_ADDRESS }}/vuorovaikutusalusta
+  IMAGE_NAME_TEST: ${{ secrets.ACR_REGISTRY_ADDRESS }}/vuorovaikutusalusta-test
+  IMAGE_NAME_PROD: ${{ secrets.ACR_REGISTRY_ADDRESS }}/vuorovaikutusalusta
 
 jobs:
   deploy:
-    name: Deploy to production
+    name: Deploy to test or production
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Login to registry
@@ -28,6 +31,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:latest
+          cache-from: type=registry,ref=${{ github.event_name == 'release' && env.IMAGE_NAME_PROD || env.IMAGE_NAME_TEST }}:latest
           cache-to: type=inline
-          tags: ${{ env.IMAGE_NAME }}:latest
+          tags: ${{ github.event_name == 'release' && env.IMAGE_NAME_PROD || env.IMAGE_NAME_TEST }}:latest

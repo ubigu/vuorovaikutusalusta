@@ -34,7 +34,9 @@ export async function initializeDatabase() {
           // Test connection and store it for the migration
           migrationConnection = await db.connect();
         } catch (error) {
-          logger.warn(`Error connecting to database: ${error}`);
+          logger.warn(
+            `Error connecting to database: ${error} for ${process.env.DATABASE_URL}`,
+          );
           if (retryCount < connectRetries) {
             logger.info(
               `Retrying database connection (${++retryCount}/${connectRetries})`,
@@ -100,16 +102,16 @@ export function getGeoJSONColumn(
       return !value
         ? 'NULL'
         : value.properties?.bufferRadius != null
-        ? // If geometry provided with buffer radius, add ST_Buffer
-          pgp.as.format(
-            'public.ST_Buffer(public.ST_SetSRID(public.ST_GeomFromGeoJSON($1), $2), $3)',
-            [value, inputSRID, value.properties.bufferRadius],
-          )
-        : pgp.as.format(
-            // Transform provided geometry to default SRID
-            'public.ST_SetSRID(public.ST_GeomFromGeoJSON($1), $2)',
-            [value, inputSRID],
-          );
+          ? // If geometry provided with buffer radius, add ST_Buffer
+            pgp.as.format(
+              'public.ST_Buffer(public.ST_SetSRID(public.ST_GeomFromGeoJSON($1), $2), $3)',
+              [value, inputSRID, value.properties.bufferRadius],
+            )
+          : pgp.as.format(
+              // Transform provided geometry to default SRID
+              'public.ST_SetSRID(public.ST_GeomFromGeoJSON($1), $2)',
+              [value, inputSRID],
+            );
     },
   };
 }

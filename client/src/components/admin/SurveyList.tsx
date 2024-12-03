@@ -125,7 +125,10 @@ export default function SurveyList() {
       {surveysLoading ? (
         <Skeleton variant="rectangular" width="100%" height={300} />
       ) : (
-        <>
+        <ul
+          style={{ listStyle: 'none', padding: '0' }}
+          data-testid="survey-admin-list"
+        >
           {surveys
             .filter((s) =>
               filterTags.length
@@ -137,7 +140,7 @@ export default function SurveyList() {
             .map((survey) => (
               <SurveyListItem key={survey.id} survey={survey} />
             ))}
-        </>
+        </ul>
       )}
     </div>
   );

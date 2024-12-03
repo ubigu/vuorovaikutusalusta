@@ -124,7 +124,7 @@ export default function QuestionOptions({
           disabled={disabled}
           aria-label="add-question-option"
           size="small"
-          sx={{boxShadow: 'none'}}
+          sx={{ boxShadow: 'none' }}
           onClick={() => {
             onChange([...options, { text: initializeLocalizedObject('') }]);
           }}
@@ -139,6 +139,7 @@ export default function QuestionOptions({
             <DraggableIcon style={{ fontSize: '14' }} />
             <div className={classes.textInput}>
               <TextField
+                data-testid={`radio-input-option-${index}`}
                 multiline
                 inputRef={inputRefs[index]}
                 style={{ width: '100%' }}

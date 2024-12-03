@@ -92,7 +92,7 @@ export default function SurveyListItem(props: Props) {
   }, [survey.name]);
 
   return (
-    <>
+    <li style={{ marginBottom: '20px' }}>
       <Card
         className={clsx(
           loading && classes.loading,
@@ -322,6 +322,6 @@ export default function SurveyListItem(props: Props) {
           setLoading(false);
         }}
       />
-    </>
+    </li>
   );
 }

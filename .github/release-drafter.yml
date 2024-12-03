@@ -1,0 +1,44 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+categories:
+  - title: 'Features'
+    label: 'feature'
+  - title: 'Bug fixes'
+    label: 'fix'
+  - title: 'Infra changes'
+    label: 'infra'
+  - title: 'Maintenance'
+    label: 'chore'
+autolabeler:
+  - label: 'feature'
+    branch:
+      - '/feature\/.+/'
+  - label: 'fix'
+    branch:
+      - '/fix\/.+/'
+  - label: 'infra'
+    branch:
+      - '/infra\/.+/'
+  - label: 'chore'
+    branch:
+      - '/chore\/.+/'
+      - '/dependabot\/.+/'
+version-resolver:
+  major:
+    labels:
+      - 'major'
+  minor:
+    labels:
+      - 'minor'
+      - 'feature'
+  patch:
+    labels:
+      - 'patch'
+      - 'fix'
+      - 'chore'
+      - 'infra'
+  default: patch
+template: |
+  ## Changes
+
+  $CHANGES

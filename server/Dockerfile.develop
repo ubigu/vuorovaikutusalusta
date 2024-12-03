@@ -20,7 +20,8 @@ RUN apk update && apk add \
   freetype \
   harfbuzz \
   ca-certificates \
-  ttf-freefont
+  ttf-freefont \
+  curl
 
 WORKDIR /app/server
 COPY package*.json ./

@@ -1,0 +1,48 @@
+services:
+  e2e-client:
+    build:
+      context: ../client
+      dockerfile: Dockerfile.develop
+    volumes:
+      # Include .git for detecting changes in the workspace (e.g. only run tests on changed files)
+      - ../.git:/app/.git:cached
+      - ../client:/app/client:cached
+      - ./client.env:/app/client/.env
+      - ../interfaces:/app/interfaces:cached
+      - /app/client/node_modules
+    ports:
+      - '127.0.0.1:8080:8080'
+  e2e-server:
+    build:
+      context: ../server
+      dockerfile: Dockerfile.develop
+    healthcheck:
+      interval: 15s
+      timeout: 30s
+      retries: 15
+      test: curl --fail http://localhost:3000/api/health || exit 1
+    volumes:
+      # Include .git for detecting changes in the workspace (e.g. only run tests on changed files)
+      - ../.git:/app/.git:cached
+      - ../server:/app/server:cached
+      - ./server.env:/app/server/.env
+      - ../interfaces:/app/interfaces:cached
+      - /app/server/node_modules
+    ports:
+      - '127.0.0.1:3000:3000'
+  e2e-database:
+    image: kartoza/postgis:12.4
+    environment:
+      POSTGRES_USER: vuorovaikutusalusta_user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: vuorovaikutusalusta_e2e_db
+      DEFAULT_COLLATION: 'fi_FI.UTF8'
+      DEFAULT_CTYPE: 'fi_FI.UTF8'
+      TZ: Europe/Helsinki
+    volumes:
+      - db-data:/var/lib/postgresql:delegated
+    ports:
+      - '127.0.0.1:5432:5432'
+
+volumes:
+  db-data:
