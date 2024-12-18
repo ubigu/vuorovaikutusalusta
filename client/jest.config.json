@@ -6,9 +6,20 @@
   },
   "testMatch": ["**/?(*.)+(spec|test).+(ts|tsx|js)"],
   "transform": {
-    "^.+\\.(ts|tsx)$": "ts-jest"
+    "^.+\\.(ts|tsx)$": [
+      "ts-jest",
+      {
+        "tsConfig": "<rootDir>/client/tsconfig.json",
+        "jsx": "react"
+      }
+    ],
+    "^.+\\.js$": "babel-jest"
   },
-  "setupFiles": ["./setupTests.ts", "jest-canvas-mock"],
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+    "/client/dist/",
+    "/server/dist/"
+  ],
   "transformIgnorePatterns": ["node_modules/(?!(ol)/)"],
   "automock": false
 }
