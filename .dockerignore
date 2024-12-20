@@ -24,4 +24,9 @@ server/*
 !server/jest.config.json
 !server/.eslintrc
 
+schemas/*
+!schemas/package*.json
+!schemas/tsconfig.json
+!schemas/src
+
 !interfaces

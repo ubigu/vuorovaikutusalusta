@@ -20,7 +20,8 @@
     "noUnusedParameters": true,
     "paths": {
       "@src/*": ["src/*"],
-      "@interfaces/*": ["../interfaces/*"]
+      "@interfaces/*": ["../interfaces/*"],
+      "@schemas/*": ["node_modules/schemas/src/*"]
     },
     "baseUrl": "."
   }

@@ -9,6 +9,14 @@ FROM node:20.5-alpine AS base
 
 ENV APPDIR /app
 
+WORKDIR ${APPDIR}/schemas
+
+COPY schemas/package*.json ./
+RUN npm ci
+
+COPY schemas ./
+RUN npm run build
+
 ###
 # Client build stage
 ###

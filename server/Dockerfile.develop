@@ -23,8 +23,12 @@ RUN apk update && apk add \
   ttf-freefont \
   curl
 
+WORKDIR /app/schemas
+COPY ./schemas ./
+RUN npm install && npm run build
+
 WORKDIR /app/server
-COPY package*.json ./
+COPY ./server/package*.json ./
 RUN npm i
 
 ENV TZ=Europe/Helsinki

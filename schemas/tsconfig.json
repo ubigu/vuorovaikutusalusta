@@ -5,12 +5,7 @@
     "esModuleInterop": true,
     "outDir": "dist",
     "baseUrl": ".",
-    "skipLibCheck": true,
-    "paths": {
-      "@src/*": ["src/*", "dist/*"],
-      "@interfaces/*": ["../interfaces/*"],
-      "@schemas/*": ["node_modules/schemas/src/*"]
-    }
+    "skipLibCheck": true
   },
   "include": ["src"]
 }

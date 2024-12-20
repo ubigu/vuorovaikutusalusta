@@ -49,6 +49,7 @@
     "express-async-handler": "^1.2.0",
     "express-session": "^1.18.0",
     "express-validator": "^6.15.0",
+    "js-yaml": "^4.1.0",
     "markdown-it": "^12.3.2",
     "moment": "^2.30.1",
     "morgan": "^1.10.0",
@@ -68,9 +69,12 @@
     "pug": "^3.0.3",
     "puppeteer": "^14.1.0",
     "puppeteer-cluster": "^0.23.0",
+    "schemas": "file:../schemas",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^3.15.0",
-    "winston": "^3.14.2"
+    "winston": "^3.14.2",
+    "zod": "^3.24.1",
+    "zod-openapi": "^4.2.0"
   },
   "devDependencies": {
     "@types/connect-pg-simple": "^4.2.4",

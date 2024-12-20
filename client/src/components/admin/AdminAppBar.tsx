@@ -10,10 +10,10 @@ import {
 import { SystemStyleObject } from '@mui/system';
 import SurveyLanguageMenu from '../SurveyLanguageMenu';
 import LanguageMenu from '../LanguageMenu';
-import { AdminInstructionButton } from './AdminInstructionButton';
 import AppBarUserMenu from './AppBarUserMenu';
 import { NavLink } from 'react-router-dom';
 import KartallaLogo from '@src/components/icons/KartallaLogo';
+import { AppBarInstructionsMenu } from './Instructions/AppBarInstructionsMenu';
 
 interface Props {
   labels?: string[];
@@ -61,7 +61,7 @@ export function AdminAppBar({
                     },
                   }}
                 >
-                  <KartallaLogo/>
+                  <KartallaLogo />
                 </Typography>
               </ListItem>
             )}
@@ -88,11 +88,12 @@ export function AdminAppBar({
               display: 'flex',
               flexDirection: 'row',
               justifySelf: 'flex-end',
+              gap: '0.25rem',
             }}
           >
             <SurveyLanguageMenu />
             <LanguageMenu />
-            <AdminInstructionButton />
+            <AppBarInstructionsMenu />
             <AppBarUserMenu />
           </div>
         </Toolbar>

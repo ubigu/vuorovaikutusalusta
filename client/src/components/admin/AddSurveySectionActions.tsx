@@ -311,7 +311,7 @@ export default function AddSurveySectionActions(props: Props) {
                     onClick={handleAdd(button.type)}
                     disabled={props.disabled}
                     style={{ minWidth: '40px' }}
-                    sx={{boxShadow: 'none'}}
+                    sx={{ boxShadow: 'none' }}
                   >
                     {button.icon}
                   </Fab>
@@ -334,7 +334,7 @@ export default function AddSurveySectionActions(props: Props) {
                     size="small"
                     onClick={handleAdd(button.type)}
                     disabled={props.disabled}
-                    sx={{boxShadow: 'none'}}
+                    sx={{ boxShadow: 'none' }}
                   >
                     {button.icon}
                   </Fab>
@@ -350,7 +350,7 @@ export default function AddSurveySectionActions(props: Props) {
                   color="secondary"
                   aria-label={'attach-section-from-clipboard'}
                   size="small"
-                  sx={{boxShadow: 'none'}}
+                  sx={{ boxShadow: 'none' }}
                   onClick={() => {
                     // Copy content from Clipboard context to active survey
                     if (clipboardSection) {

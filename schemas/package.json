@@ -1,0 +1,17 @@
+{
+  "name": "schemas",
+  "version": "0.1.0",
+  "description": "Shared zod schemas",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

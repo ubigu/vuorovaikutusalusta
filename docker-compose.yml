@@ -2,24 +2,26 @@ version: '3.8'
 services:
   client:
     build:
-      context: client
-      dockerfile: Dockerfile.develop
+      context: .
+      dockerfile: ./client/Dockerfile.develop
     volumes:
       # Include .git for detecting changes in the workspace (e.g. only run tests on changed files)
       - .git:/app/.git:cached
       - ./client:/app/client:cached
+      - ./schemas:/app/schemas:cached
       - ./interfaces:/app/interfaces:cached
       - /app/client/node_modules
     ports:
       - '8080:8080'
   server:
     build:
-      context: server
-      dockerfile: Dockerfile.develop
+      context: .
+      dockerfile: ./server/Dockerfile.develop
     volumes:
       # Include .git for detecting changes in the workspace (e.g. only run tests on changed files)
       - .git:/app/.git:cached
       - ./server:/app/server:cached
+      - ./schemas:/app/schemas:cached
       - ./interfaces:/app/interfaces:cached
       - /app/server/node_modules
     ports:

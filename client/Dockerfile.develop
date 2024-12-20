@@ -10,8 +10,12 @@ ENV GIT_DIR=/app/.git
 
 RUN apk update && apk add git
 
+WORKDIR /app/schemas
+COPY ./schemas ./
+RUN npm install && npm run build
+
 WORKDIR /app/client
-COPY package*.json ./
+COPY ./client/package*.json ./
 RUN npm i
 
 CMD ["npm", "run", "dev"]
