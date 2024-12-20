@@ -1,0 +1,391 @@
+openapi: 3.1.0
+info:
+  title: Kartalla API
+  description: API description for Kartalla survey platform.
+  version: 1.0.0
+servers:
+  - url: https://test.kartalla.io/api
+    description: Test server
+  - url: https://kartalla.io/api
+    description: Production server
+tags:
+  - name: Surveys
+    description: Survey operations for fetching survey data and related submissions.
+  - name: Files
+    description: Get files from a generic file store that can contain for example images and documents.
+paths:
+  /surveys:
+    get:
+      description: Get all surveys which are created for the same organization as the authenticated user.
+      tags:
+        - Surveys
+      parameters:
+        - name: filterByAuthored
+          in: query
+          description: Show only surveys authored for the authenticated user.
+          schema:
+            type: boolean
+        - name: filterByPublished
+          in: query
+          description: Show only published surveys.
+          schema:
+            type: boolean
+      operationId: get-surveys
+      summary: Get all surveys
+      responses:
+        '200':
+          description: A list of surveys
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/APISurvey'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /surveys/{surveyId}:
+    get:
+      description: Get a survey by its id. The survey must be created for the same organization as the authenticated user and the user must be an admin or author of the survey.
+      tags:
+        - Surveys
+      operationId: get-survey
+      summary: Get a survey by id
+      parameters:
+        - name: surveyId
+          in: path
+          required: true
+          schema:
+            type: number
+          description: The id of the survey.
+      responses:
+        '200':
+          description: A survey
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APISurvey'
+        '400':
+          description: Bad request if invalid survey id is provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  info:
+                    type: object
+                examples:
+                  - error:
+                      message: 'Validation error'
+                      info:
+                        errors:
+                          - value: 'by-name'
+                            msg: 'ID must be a number'
+                            param: 'id'
+                            location: 'params'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Forbidden request if the user is not an admin or author of the survey.
+          content:
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: Internal server error if invalid survey id is provided.
+  /surveys/{surveyId}/submissions:
+    get:
+      description: Get all submissions for a survey by its id. The authenticated user must be an admin or an author of the survey.
+      tags:
+        - Surveys
+      operationId: get-survey-submissions
+      summary: Get all submissions for a survey
+      parameters:
+        - name: surveyId
+          in: path
+          required: true
+          schema:
+            type: number
+          description: The id of the survey.
+      responses:
+        '200':
+          description: A list of submissions for a survey.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Submission'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          description: Bad request if invalid survey id is provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  info:
+                    type: object
+                examples:
+                  - error:
+                      message: 'Validation error'
+                      info:
+                        errors:
+                          - value: 'by-name'
+                            msg: 'ID must be a number'
+                            param: 'id'
+                            location: 'params'
+
+        '500':
+          description: Internal server error if invalid survey id is provided.
+  /file/{groupId}/{fileType}/{fileName}:
+    get:
+      description: Get a file from the file store by its group id, type and name.
+      tags:
+        - Files
+      operationId: get-file
+      summary: Get a file
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The id of the user group that the file belongs to.
+        - name: fileType
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The type of the file.
+        - name: fileName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The name of the file.
+      responses:
+        '200':
+          description: The file
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          description: Internal server error if invalid file or group id is provided.
+components:
+  responses:
+    UnauthorizedError:
+      description: Unauthorized request error response.
+      content:
+        text/html:
+          schema:
+            type: string
+  schemas:
+    APISurvey:
+      description: A survey object which contains all necessary information used by the client application.
+      type: object
+      required:
+        [
+          id,
+          name,
+          title,
+          subtitle,
+          author,
+          authorUnit,
+          authorId,
+          admins,
+          mapUrl,
+          startDate,
+          endDate,
+          allowTestSurvey,
+          createdAt,
+          updatedAt,
+          thanksPage,
+          theme,
+          sectionTitleColor,
+          email,
+          localisationEnabled,
+          displayPrivacyStatement,
+          submissionCount,
+          marginImages,
+          organization,
+          tags,
+          enabledLanguages,
+        ]
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+          description: Used to generate the public URL of the survey.
+        title:
+          type: string
+        subtitle:
+          type: string
+        author:
+          type: string
+        authorUnit:
+          type: string
+        authorId:
+          type: string
+        admins:
+          type: array
+          description: Array of administrator user IDs.
+          items:
+            type: string
+        mapUrl:
+          type: string
+          description: URL of the embedded map component.
+        startDate:
+          type: string
+          description: Date when the survey is planned to start and go publick.
+        endDate:
+          type: string
+          description: Date when the survey is planned to end.
+        allowTestSurvey:
+          type: boolean
+          description: Publish a "dummy" test survey on save?
+        isPublished:
+          type: boolean
+          description: Is the survey currently published? Computed server-side from startDate and endDate timestamp values - cannot be updated.
+        createdAt:
+          type: string
+          description: Date when the survey was initially created.
+        updatedAt:
+          type: string
+          description: Date when the survey was modified last time.
+        pages:
+          type: array
+          description: Survey page objects. This array contains pages only if a single survey is fetched with an ID.
+          items:
+            $ref: '#/components/schemas/SurveyPage'
+        backgroundImageUrl:
+          type: string
+          description: >
+            URL of the survey background image. Can be used to fetch the image from the [file endpoint](#operation/get-file).
+
+        thanksPage:
+          type: object
+          required: [title, text]
+          properties:
+            title:
+              type: string
+            text:
+              type: string
+            imageUrl:
+              type: string
+        theme:
+          type: object
+          description: Theme of the survey.
+        sectionTitleColor:
+          type: string
+        email:
+          type: object
+          required: [enabled, autoSendTo, subject, body]
+          properties:
+            enabled:
+              type: boolean
+              description: Is email reporting for single submissions enabled?
+            autoSendTo:
+              type: array
+              items:
+                type: string
+              description: Fixed recipient addresses for the automatic sending.
+            subject:
+              type: string
+            body:
+              type: string
+            info:
+              type: array
+              items:
+                type: object
+              description: Optional free-form information to be shown on the front page of the report.
+        allowSavingsUnfinished:
+          type: boolean
+          description: Should the survey be able to be saved as unfinished?
+        localisationEnabled:
+          type: boolean
+          description: Allow publishing surveys with different languages.
+        displayPrivacyStatement:
+          type: boolean
+        submissionCount:
+          type: number
+          description: Number of submissions for the survey.
+        marginImages:
+          type: object
+          description: Margin images displayed on the landing and thanks pages.
+          properties:
+            top:
+              type: object
+            bottom:
+              type: object
+        organization:
+          type: string
+          description: User organization that can access the survey.
+        tags:
+          type: array
+          items:
+            type: string
+        enabledLanguages:
+          type: object
+
+    Submission:
+      description: A submission object which represent a single survey answer submission.
+      type: object
+      required: [id, timestamp]
+      properties:
+        id:
+          type: string
+        timestamp:
+          type: string
+        answerEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnswerEntry'
+    AnswerEntry:
+      description: An answer entry object which represent a single answer to a survey question.
+      type: object
+      required: [sectionId, type, value]
+      properties:
+        sectionId:
+          description: The id of the page section.
+          type: string
+        type:
+          type: string
+        value:
+          oneOf:
+            - type: string
+            - type: number
+            - type: object
+    SurveyPage:
+      description: A survey page object represents a single page in a survey which contains questions and other content.
+      type: object
+      required: [id, title, sidebar, sections]
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        sidebar:
+          type: object
+          description: Side bar definition for the survey page.
+        sections:
+          type: array
+          items:
+            type: object
+          description: Page sections which includes all questions and other content like attachments.
+        conditions:
+          type: array
+          items:
+            type: object
+          description: Conditions to display the page in the survey.
+        isVisible:
+          type: boolean
+          description: Are conditional page conditions fulfilled.

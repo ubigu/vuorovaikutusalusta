@@ -547,6 +547,11 @@
     "logout": "Kirjaudu ulos",
     "updateInstructions": "Päivitä käyttöohjeet"
   },
+  "AppBarInstructionsMenu": {
+    "label": "Ohjeet",
+    "instructions": "Käyttöohje",
+    "apiDescription": "Rajapintakuvaus"
+  },
   "InstructionsDialog": {
     "fetchingError": "Virhe haettaessa nykyisiä käyttöohjeita",
     "currentInstructions": "Nykyiset käyttöohjeet",
@@ -641,6 +646,5 @@
   "TagPicker": {
     "addTags": "Lisää tunnisteita",
     "filterWithTags": "Suodata tunnisteilla"
-  },
-  "adminInstructions": "Avaa käyttöohje"
+  }
 }

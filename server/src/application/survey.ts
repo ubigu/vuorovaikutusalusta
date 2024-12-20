@@ -20,7 +20,9 @@ import {
   SurveyPageSidebarType,
   SurveyRadioQuestion,
   SurveyTheme,
+  APISurvey,
 } from '@interfaces/survey';
+
 import { User } from '@interfaces/user';
 import {
   getColumnSet,
@@ -759,7 +761,11 @@ export async function getSurveys(
 
   return rows
     .map((row) => dbSurveyToSurvey(row))
-    .filter((survey) => (filterByPublished ? isPublished(survey) : survey));
+    .filter((survey) =>
+      filterByPublished
+        ? isPublished({ startDate: survey.startDate, endDate: survey.endDate })
+        : survey,
+    );
 }
 
 export async function getSurveyOrganization(id: number) {
@@ -1442,9 +1448,7 @@ function isPublished(survey: Pick<Survey, 'startDate' | 'endDate'>) {
  * @param dbSurvey
  * @returns Survey containing the database entries
  */
-function dbSurveyToSurvey(
-  dbSurvey: DBSurvey | DBSurveyJoin,
-): Omit<Survey, 'createdAt' | 'updatedAt'> {
+function dbSurveyToSurvey(dbSurvey: DBSurvey | DBSurveyJoin): APISurvey {
   const survey = {
     id: dbSurvey.id,
     name: dbSurvey.name,

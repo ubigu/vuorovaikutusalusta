@@ -496,6 +496,8 @@ export interface Survey {
   enabledLanguages: EnabledLanguages;
 }
 
+export type APISurvey = Omit<Survey, 'createdAt' | 'updatedAt'>;
+
 export type EnabledLanguages = Record<LanguageCode, boolean>;
 
 /**

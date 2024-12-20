@@ -40,8 +40,6 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { FollowUpListItemIcon } from '@src/components/icons/FollowUpListItemIcon';
-import { useClipboard } from '@src/stores/ClipboardContext';
-import { useToasts } from '@src/stores/ToastContext';
 import { useTranslations } from '@src/stores/TranslationContext';
 import React, { ReactNode, useMemo, useRef, useState } from 'react';
 import { DraggableProvided } from 'react-beautiful-dnd';
@@ -109,8 +107,6 @@ export function FollowUpSectionAccordion(props: Props) {
   const [deleteConfirmDialogOpen, setDeleteConfirmDialogOpen] = useState(false);
   const classes = useStyles();
   const { tr, surveyLanguage } = useTranslations();
-  const { setSection, clipboardPage } = useClipboard();
-  const { showToast } = useToasts();
 
   // Index is used inside a callback function -> useRef is required in React to catch all updates
   const indexRef = useRef<number>();
@@ -169,7 +165,6 @@ export function FollowUpSectionAccordion(props: Props) {
       tooltip: tr.SurveySection.mapQuestion,
       form: (
         <EditMapQuestion
-          disableSectionCopying
           disabled={props.disabled}
           section={props.section as SurveyMapQuestion}
           onChange={handleEdit}
